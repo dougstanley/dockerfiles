@@ -16,7 +16,7 @@ RUN apt-mark hold initscripts udev plymouth mountall upstart; \
     apt-get clean; \
     apt-get autoclean; \
     rm -rf /var/lib/apt/lists/*; \
-    rm -rf /tmp/*; \
+    rm -rf /tmp/*
 
 RUN locale-gen en_US en_US.UTF-8; \
     dpkg-reconfigure locales; \
