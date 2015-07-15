@@ -18,7 +18,9 @@ RUN apt-get -y -q update; \
         libpython3-stdlib \
         python3-lxml \
         python3-openssl \
+        virtualenv \
         xml-core ;\
+    pip3 install --upgrade pip \
     apt-get clean; \
     apt-get autoclean; \
     rm -rf /var/lib/apt/lists/*; \
