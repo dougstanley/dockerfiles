@@ -16,7 +16,7 @@ RUN apt-get -y -q update && \
     apt-get -y -q dist-upgrade ;\
     apt-get install -y -q nodejs git ; \
     curl -sSL -o '/root/atom-amd64.deb' \
-    'https://github.com/atom/atom/releases/download/v1.5.3/atom-amd64.deb' && \
+    'https://github.com/atom/atom/releases/download/v1.8.0/atom-amd64.deb' && \
     gdebi -n -q /root/atom-amd64.deb && \
     apt-get -y -q -f install && \
     rm -f /root/atom-amd64.deb ;\
