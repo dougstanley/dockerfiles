@@ -1,17 +1,25 @@
-#!/bin/bash
+#!/bin/sh
+set -e
+if [ "${1:0:1}" = '-' ]; then
+	set -- postgres "$@"
+fi
+. /etc/conf.d/postgresql
 
-if [ ! -d /var/lib/postgresql/9.4/main ]; then
-  mkdir -p /var/lib/postgresql/9.4/main
+if [ ! -d ${PGDATA} ]; then
+  mkdir -p ${PGDATA}
   chown -R postgres:postgres /var/lib/postgresql/
   chmod -R 0700 /var/lib/postgresql
-  /usr/lib/postgresql/9.4/bin/initdb -D /var/lib/postgresql/9.4/main
+  su -c "/usr/bin/initdb -D ${PGDATA} --auth-host=md5 --auth-local=peer" - postgres
+  sed  \
+    -e "s/^#\(listen_addresses.*=.*\)\(localhost\)\(.*\)$/\1*\3/" \
+    -e 's/^#\(port\s*=\s*5432.*\)$/\1/' \
+    -i ${PGDATA}"/postgresql.conf"
+
+  echo -e 'host\tall\t\tall\t\t0.0.0.0/0\t\tmd5' >> ${PGDATA}"/pg_hba.conf"
 fi
 
-if [ ! -d /var/run/postgresql/9.4-main.pg_stat_tmp ]; then
-    mkdir -p /var/run/postgresql/9.4-main.pg_stat_tmp
-    chown postgres:postgres /var/run/postgresql/9.4-main.pg_stat_tmp
+if [ "$1" = 'postgres' ]; then
+    set -- su -c 'postgres -D '"${PGDATA}" - postgres
 fi
 
-su -c "/usr/lib/postgresql/9.4/bin/postgres -D /var/lib/postgresql/9.4/main \
-      -c config_file=/etc/postgresql/9.4/main/postgresql.conf" \
-      - postgres
+exec "$@"
