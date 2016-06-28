@@ -1,27 +1,7 @@
-FROM dstanley/buildhost:jessie
-MAINTAINER Doug Stanley <doug@technologixllc.com>
+FROM alpine:3.4
+MAINTAINER Doug Stanley <doug@douglasstanley.com>
 
-ENV DEBIAN_FRONTEND noninteractive
-
-RUN apt-get -y -q update; \
-    apt-get -y -q install --no-install-recommends \
-		python3 \
-        python3-all \
-		python-all-dev \
-		python3-dev \
-        python3-setuptools \
-        python3-pip \
-        python3-pkg-resources \
-        python3-virtualenv \
-        libpython3-all-dev \
-        libpython3-dev \
-        libpython3-stdlib \
-        python3-lxml \
-        python3-openssl \
-        virtualenv \
-        xml-core ;\
-    pip3 install --upgrade pip \
-    apt-get clean; \
-    apt-get autoclean; \
-    rm -rf /var/lib/apt/lists/*; \
-    rm -rf /tmp/*
+RUN apk add --update build-base git python3 python3-dev ;\
+    /usr/bin/python3 -mensurepip ; \
+    /usr/bin/pip3 install --upgrade pip ;\
+    rm -rf /var/cache/apk/*
