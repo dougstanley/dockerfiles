@@ -7,7 +7,7 @@ fi
 
 : ${user:=${PGUSER:-"postgres"}}
 : ${group:=${PGGROUP:-"postgres"}}
-: ${data_dir:=${PGDATA:-"/var/lib/postgresql/9.6/data"}}
+: ${data_dir:=${PGDATA:-"/var/lib/postgresql/10/data"}}
 : ${conf_dir:=$data_dir}
 : ${env_vars:=${PG_EXTRA_ENV:-}}
 : ${initdb_opts:=${PG_INITDB_OPTS:-}}
@@ -32,7 +32,7 @@ if [ ! -d ${data_dir} ]; then
     -e 's/^#\(port\s*=\s*5432.*\)$/\1/' \
     -i ${data_dir}"/postgresql.conf"
 
-  echo -e 'host\tall\t\tall\t\t0.0.0.0/0\t\tmd5' >> ${data_dir}"/pg_hba.conf"
+  printf 'host\tall\t\tall\t\t0.0.0.0/0\t\tmd5\n' >> ${data_dir}"/pg_hba.conf"
 fi
 
 if [ "$1" = 'postgres' ]; then

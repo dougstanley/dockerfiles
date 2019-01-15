@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:3.8
 MAINTAINER Doug Stanley <doug@douglasstanley.com>
 
 ADD run.sh /run.sh
